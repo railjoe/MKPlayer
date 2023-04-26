@@ -1,8 +1,8 @@
 //
 //  RegularPlayer.swift
-//  Pods
+//  PlayerKit
 //
-//  Created by King, Gavin on 3/7/17.
+//  Created by Jovan Stojanov on 24.4.23..
 //
 //
 
@@ -24,7 +24,7 @@ class RegularPlayer: NSObject, Player, ProvidesView {
     
     // MARK: - Private Properties
     
-    fileprivate var player = AVPlayer()
+    fileprivate var player: AVPlayer
 
     private var regularPlayerView: RegularPlayerView
 
@@ -124,7 +124,7 @@ class RegularPlayer: NSObject, Player, ProvidesView {
     }
     
     public var ended: Bool {
-        return self.time >= self.duration
+        return ceil(self.time) >= ceil(self.duration)
     }
     
     public var error: NSError? {
@@ -150,7 +150,8 @@ class RegularPlayer: NSObject, Player, ProvidesView {
         self.init(seekTolerance: nil)
     }
     
-    public init(seekTolerance: TimeInterval?) {
+    public init(player: AVPlayer = AVPlayer(), seekTolerance: TimeInterval?) {
+        self.player = player
         self.regularPlayerView = RegularPlayerView(frame: .zero)
         self.seekTolerance = seekTolerance.map {
             CMTimeMakeWithSeconds($0, preferredTimescale: Int32(NSEC_PER_SEC))

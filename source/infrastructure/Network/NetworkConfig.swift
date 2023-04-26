@@ -1,8 +1,8 @@
 //
 //  ServiceConfig.swift
-//  ExampleMVVM
+//  PlayerKit
 //
-//  Created by Oleh Kudinov on 01.10.18.
+//  Created by Jovan Stojanov on 24.4.23..
 //
 
 import Foundation

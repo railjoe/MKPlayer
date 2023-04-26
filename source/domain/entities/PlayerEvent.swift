@@ -11,7 +11,7 @@ import UIKit
 struct PlayerEvent: Codable {
     let type: EventType
     let isStream: Bool
-    let videoId: String?
+//    let videoId: String?
     let playerId: String?
     let projectHash: String?
     let date: Int64 = Int64((Date().timeIntervalSince1970 * 1000.0).rounded())
@@ -20,9 +20,9 @@ struct PlayerEvent: Codable {
     let osVersion: String?
     let app: String?
     let appVersion: String?
-    let screen: String?
-    let videoTitle: String?
-    let poster: String?
+//    let screen: String?
+//    let videoTitle: String?
+//    let poster: String?
 
     init(type: EventType, isStream: Bool, playerId: String?, projectHash: String?, videoId: String?, screen: String? = nil , videoTitle: String? = nil, poster: String? = nil) {
         self.type = type
@@ -34,10 +34,10 @@ struct PlayerEvent: Codable {
         self.osVersion = UIDevice.current.systemVersion
         self.app = Bundle.main.displayName
         self.appVersion = Bundle.main.releaseVersionNumber
-        self.screen = screen
-        self.videoId = videoId
-        self.videoTitle = videoTitle
-        self.poster = poster
+//        self.screen = screen
+//        self.videoId = videoId
+//        self.videoTitle = videoTitle
+//        self.poster = poster
     }
     
     enum CodingKeys: String, CodingKey {
@@ -51,10 +51,10 @@ struct PlayerEvent: Codable {
         case osVersion = "os_version"
         case app = "app"
         case appVersion = "app_version"
-        case screen = "screen"
-        case videoId = "video_id"
-        case videoTitle = "video_title"
-        case poster = "poster"
+//        case screen = "screen"
+//        case videoId = "video_id"
+//        case videoTitle = "video_title"
+//        case poster = "poster"
     }
     
     enum EventType: String, Codable {

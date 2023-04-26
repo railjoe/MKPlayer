@@ -1,8 +1,8 @@
 //
 //  AVPlayer+Utilities.swift
-//  Pods
+//  PlayerKit
 //
-//  Created by King, Gavin on 3/7/17.
+//  Created by Jovan Stojanov on 24.4.23..
 //
 //
 

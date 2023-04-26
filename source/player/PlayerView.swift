@@ -2,7 +2,7 @@
 //  PlayerView.swift
 //  PlayerKit
 //
-//  Created by Balatbat, Bryant on 12/20/17.
+//  Created by Jovan Stojanov on 24.4.23..
 //
 
 /// This file creates a `typealias` called `PlayerView` that determines which core view component to use depending on

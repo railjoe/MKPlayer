@@ -17,4 +17,5 @@ Pod::Spec.new do |spec|
   spec.resources = 'source/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}'
   spec.swift_versions = '5.0'
   spec.ios.deployment_target = '10.0'
+  spec.dependency 'GoogleAds-IMA-iOS-SDK', '~> 3.18.5'
 end

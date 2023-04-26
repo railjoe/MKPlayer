@@ -55,6 +55,7 @@
 		395B407D29ED859600F6D6EA /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395B407B29ED859600F6D6EA /* PlayerViewController.swift */; };
 		395B407E29ED859600F6D6EA /* PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 395B407C29ED859600F6D6EA /* PlayerViewController.xib */; };
 		396C1EA929F83DCE00006571 /* MKConfigBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396C1EA829F83DCE00006571 /* MKConfigBuilder.swift */; };
+		396C1EAB29F8739B00006571 /* GoogleInteractiveMediaAds.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 396C1EAA29F8739B00006571 /* GoogleInteractiveMediaAds.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +109,7 @@
 		395B407B29ED859600F6D6EA /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		395B407C29ED859600F6D6EA /* PlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayerViewController.xib; sourceTree = "<group>"; };
 		396C1EA829F83DCE00006571 /* MKConfigBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKConfigBuilder.swift; sourceTree = "<group>"; };
+		396C1EAA29F8739B00006571 /* GoogleInteractiveMediaAds.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleInteractiveMediaAds.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				396C1EAB29F8739B00006571 /* GoogleInteractiveMediaAds.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +295,7 @@
 		395B405B29ED855200F6D6EA /* PlayerSDK */ = {
 			isa = PBXGroup;
 			children = (
+				396C1EAA29F8739B00006571 /* GoogleInteractiveMediaAds.xcframework */,
 				395B405C29ED855200F6D6EA /* AppDelegate.swift */,
 				395B406729ED855400F6D6EA /* LaunchScreen.storyboard */,
 				395B406A29ED855400F6D6EA /* Info.plist */,

@@ -1,8 +1,8 @@
 //
 //  Cancellable.swift
-//  ExampleMVVM
+//  PlayerKit
 //
-//  Created by Oleh Kudinov on 10.03.19.
+//  Created by Jovan Stojanov on 24.4.23..
 //
 
 import Foundation
