@@ -45,6 +45,6 @@ import Foundation
         return self
     }
     public func build() -> MKConfig {
-        return MKConfig(url: url, playerId: playerId, projectHash: projectHash, adTag: adTag, mute: mute ?? false, autoplay: autoplay ?? true, lightTheme: lightTheme ?? true)
+        return MKConfig(url: url, playerId: playerId, projectHash: projectHash, adTag: adTag, mute: mute ?? false, autoplay: autoplay ?? false, lightTheme: lightTheme ?? true)
     }
 }

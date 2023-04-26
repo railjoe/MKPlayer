@@ -124,7 +124,11 @@ class RegularPlayer: NSObject, Player, ProvidesView {
     }
     
     public var ended: Bool {
-        return ceil(self.time) >= ceil(self.duration)
+        if self.duration > 0 {
+            return ceil(self.time) >= ceil(self.duration)
+        } else {
+            return false
+        }
     }
     
     public var error: NSError? {

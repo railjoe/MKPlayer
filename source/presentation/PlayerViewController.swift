@@ -63,11 +63,28 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //    deinit {
-    //        NotificationCenter.default.removeObserver(self)
-    //    }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator .animate { [weak self] context in
+            if self?.presentingViewController == nil {
+                let statusBarOrientation = UIApplication.shared.statusBarOrientation
+                if statusBarOrientation.isLandscape {
+                    
+#if canImport(GoogleInteractiveMediaAds)
+                    if(self?.adsManager?.adPlaybackInfo.isPlaying == false) {
+                        self?.enterFullscreen()
+                    }
+#else
+                    self?.enterFullscreen()
+#endif
+                }
+            }
+        }
+    }
     
-    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,26 +173,40 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         }
     }
     
-    private func enterFullscreen(){
-//        if let controller = controller {
-            self.view.removeFromSuperview()
-            removeFromParent()
-            //            self.view.frame = UIScreen.main.bounds
-            self.modalPresentationStyle = .fullScreen
-            //            controller.present(self, animated: false)
-            
-            alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            
-            alertWindow?.windowLevel = UIWindow.Level.alert + 1
-            alertWindow?.backgroundColor = UIColor.clear
-            alertWindow?.rootViewController = UIViewController()
-            
-            self.view.frame = alertWindow?.bounds ?? CGRectZero
-            
-            alertWindow?.addSubview(self.view)
-            alertWindow?.makeKeyAndVisible()
-            alertWindow?.rootViewController?.present(self, animated: false)
+    private func enterFullscreen(){//_ updateOrientation: Bool = false
+        //        if let controller = controller {
+        self.view.removeFromSuperview()
+        removeFromParent()
+        //            self.view.frame = UIScreen.main.bounds
+        self.modalPresentationStyle = .overCurrentContext
+        //            controller.present(self, animated: false)
+        
+        alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        
+        alertWindow?.windowLevel = UIWindow.Level.alert + 1
+        alertWindow?.backgroundColor = UIColor.clear
+        alertWindow?.rootViewController = UIViewController()
+        alertWindow?.rootViewController?.view.backgroundColor = .black
+        
+        self.view.frame = alertWindow?.bounds ?? CGRectZero
+        
+        alertWindow?.addSubview(self.view)
+        alertWindow?.makeKeyAndVisible()
+        alertWindow?.rootViewController?.present(self, animated: false)
+        
+//        if updateOrientation {
+//            if #available(iOS 16.0, *) {
+//                controller?.setNeedsUpdateOfSupportedInterfaceOrientations()
+//                UIApplication.shared.connectedScenes.forEach { scene in
+//                    if let windowScene = scene as? UIWindowScene {
+//                        windowScene.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
+//                    }
+//                }
+//            } else {
+//                UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+//            }
 //        }
+        //        }
     }
     
     // MARK: Setup
@@ -185,13 +216,13 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         player.view.frame = self.view.bounds
         self.view.insertSubview(player.view, at: 0)
         
-//        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerDoubleTapped))
-//        doubleTapRecognizer.numberOfTapsRequired = 2
-//        player.view.addGestureRecognizer(doubleTapRecognizer)
+        //        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerDoubleTapped))
+        //        doubleTapRecognizer.numberOfTapsRequired = 2
+        //        player.view.addGestureRecognizer(doubleTapRecognizer)
         
         let singleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(playerTapped))
         singleTapRecognizer.numberOfTapsRequired = 1
-//        singleTapRecognizer.require(toFail: doubleTapRecognizer)
+        //        singleTapRecognizer.require(toFail: doubleTapRecognizer)
         player.view.addGestureRecognizer(singleTapRecognizer)
         
         let singleTapRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
@@ -199,7 +230,92 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         overlayView.addGestureRecognizer(singleTapRecognizer1)
         
         slider.addTarget(self, action: #selector(onSliderValChanged(slider:event:)), for: .valueChanged)
-
+        
+        player.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismiss)))
+        overlayView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismiss)))
+        
+        let landscapeLongPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.tapAndSlide(_:)))
+        landscapeLongPress.minimumPressDuration = 0
+        slider.addGestureRecognizer(landscapeLongPress)
+    }
+    var animatingSlider = false
+    @objc func tapAndSlide(_ gestureRecognizer: UILongPressGestureRecognizer){
+        guard let slider = gestureRecognizer.view as? UISlider else {
+            return
+        }
+        let pt = gestureRecognizer.location(in: slider)
+        let trackRect = slider.trackRect(forBounds: slider.bounds)
+        let thumbWidth = slider.thumbRect(forBounds: slider.bounds, trackRect: trackRect, value: slider.value).width
+        
+        var value: Float = 0.0
+        
+        if pt.x <= thumbWidth / 2.0 {
+            value = slider.minimumValue
+        }
+        else if pt.x >= slider.bounds.size.width - thumbWidth / 2.0 {
+            value = slider.maximumValue;
+        }
+        else {
+            let percentage = (pt.x - thumbWidth/2.0)/(slider.bounds.size.width - thumbWidth)
+            let delta = Float(percentage) * (slider.maximumValue - slider.minimumValue)
+            value = slider.minimumValue + delta;
+        }
+        
+        if gestureRecognizer.state == .began {
+            self.animatingSlider = true
+            
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+                slider.setValue(value, animated: true)
+            }
+        }
+        else {
+            slider.value = value
+        }
+        
+        if gestureRecognizer.state == .ended {
+            self.animatingSlider = false
+            slider.sendActions(for: .valueChanged)
+        }
+    }
+    
+    var viewTranslation = CGPoint(x: 0, y: 0)
+    @objc func handleDismiss(sender: UIPanGestureRecognizer) {
+        if presentingViewController != nil {
+            switch sender.state {
+            case .changed:
+                viewTranslation = sender.translation(in: view)
+                if viewTranslation.y > 0 {
+                    if viewTranslation.y > 256 {
+                        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                            self.view.transform = .identity
+                        })
+                    } else {
+                        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                            self.view.transform = CGAffineTransform(translationX: self.viewTranslation.x, y: self.viewTranslation.y)
+                        })
+                    }
+                } else {
+                    if viewTranslation.y < -256 {
+                        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                            self.view.transform = .identity
+                        })
+                    } else {
+                        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                            self.view.transform = CGAffineTransform(translationX: self.viewTranslation.x, y: self.viewTranslation.y)
+                        })
+                    }
+                }
+            case .ended:
+                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    self.view.transform = .identity
+                })
+                if viewTranslation.y >= 256 {
+                    exitFullScreen()
+                }
+            default:
+                break
+            }
+        }
     }
     
     @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
@@ -287,6 +403,17 @@ class PlayerViewController: UIViewController, PlayerDelegate {
                 self?.alertWindow = nil
             }
             self?.addToContainer()
+            
+            if #available(iOS 16.0, *) {
+                self?.controller?.setNeedsUpdateOfSupportedInterfaceOrientations()
+                UIApplication.shared.connectedScenes.forEach { scene in
+                    if let windowScene = scene as? UIWindowScene {
+                        windowScene.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+                    }
+                }
+            } else {
+                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+            }
         }
     }
     
@@ -455,39 +582,42 @@ class PlayerViewController: UIViewController, PlayerDelegate {
 extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
     
     func setUpAdsLoader() {
-        adsLoader = IMAAdsLoader(settings: nil)
+        let settings = IMASettings()
+        settings.language = "sr"
+        settings.autoPlayAdBreaks = true
+        adsLoader = IMAAdsLoader(settings: settings)
         adsLoader?.delegate = self
     }
     
     func requestAds(adTag: String) {
         // Create ad display container for ad rendering.
         
-//        if let containerView = containerView {
-            
-            hideContentPlayer()
-            let adContainerView = UIView(frame: view.bounds)
-            adContainerView.backgroundColor = .black
-            adContainerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            view.insertSubview(adContainerView, belowSubview: activityIndicator)
-            activityIndicator.startAnimating()
-            self.adContainerView = adContainerView
-
-            let adDisplayContainer = IMAAdDisplayContainer(adContainer: adContainerView, viewController: self)
-            activityIndicator.startAnimating()
-            // Create an ad request with our ad tag, display container, and optional user context.
-            let request = IMAAdsRequest(
-                adTagUrl: adTag,
-                adDisplayContainer: adDisplayContainer,
-                contentPlayhead: contentPlayhead,
-                userContext: nil)
-            
-            adsLoader?.requestAds(with: request)
-            
-//        } else {
-//            activityIndicator.stopAnimating()
-//            player.play()
-//            fireEvent(PlayerEvent.EventType.start)
-//        }
+        //        if let containerView = containerView {
+        
+        hideContentPlayer()
+        let adContainerView = UIView(frame: view.bounds)
+        adContainerView.backgroundColor = .black
+        adContainerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.insertSubview(adContainerView, belowSubview: activityIndicator)
+        activityIndicator.startAnimating()
+        self.adContainerView = adContainerView
+        
+        let adDisplayContainer = IMAAdDisplayContainer(adContainer: adContainerView, viewController: self)
+        activityIndicator.startAnimating()
+        // Create an ad request with our ad tag, display container, and optional user context.
+        let request = IMAAdsRequest(
+            adTagUrl: adTag,
+            adDisplayContainer: adDisplayContainer,
+            contentPlayhead: contentPlayhead,
+            userContext: nil)
+        
+        adsLoader?.requestAds(with: request)
+        
+        //        } else {
+        //            activityIndicator.stopAnimating()
+        //            player.play()
+        //            fireEvent(PlayerEvent.EventType.start)
+        //        }
     }
     
     func adsLoader(_ loader: IMAAdsLoader, adsLoadedWith adsLoadedData: IMAAdsLoadedData) {
@@ -516,6 +646,12 @@ extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
             activityIndicator.stopAnimating()
             adsManager.start()
             fireEvent(PlayerEvent.EventType.ad_start)
+        }
+        if event.type == IMAAdEventType.TAPPED {
+            // You can also add allow the user to tap anywhere on the Ad to resume play
+            if(!adsManager.adPlaybackInfo.isPlaying) {
+                adsManager.resume()
+            }
         }
     }
     

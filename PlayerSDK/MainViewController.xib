@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -20,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8LG-9B-eQA">
-                    <rect key="frame" x="0.0" y="59" width="393" height="221"/>
+                    <rect key="frame" x="16" y="59" width="361" height="203"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="8LG-9B-eQA" secondAttribute="height" multiplier="16:9" id="uYm-0h-gx5"/>
@@ -30,8 +31,8 @@
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="8LG-9B-eQA" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="AoD-2i-meX"/>
-                <constraint firstAttribute="trailing" secondItem="8LG-9B-eQA" secondAttribute="trailing" id="OM7-a1-HxM"/>
+                <constraint firstItem="8LG-9B-eQA" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leadingMargin" id="AoD-2i-meX"/>
+                <constraint firstAttribute="trailingMargin" secondItem="8LG-9B-eQA" secondAttribute="trailing" id="OM7-a1-HxM"/>
                 <constraint firstItem="8LG-9B-eQA" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="ziv-uS-Xym"/>
             </constraints>
             <point key="canvasLocation" x="17.557251908396946" y="19.718309859154932"/>

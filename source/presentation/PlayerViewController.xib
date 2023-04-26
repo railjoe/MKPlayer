@@ -35,7 +35,7 @@
                             <rect key="frame" x="0.0" y="249" width="389" height="44"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jbE-zl-2hx">
-                                    <rect key="frame" x="18" y="0.0" width="353" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="389" height="44"/>
                                     <subviews>
                                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sl0-cX-R8j">
                                             <rect key="frame" x="-30" y="0.0" width="30" height="44"/>
@@ -73,7 +73,7 @@
                                             </connections>
                                         </button>
                                         <view contentMode="scaleToFill" horizontalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="31T-2b-NrF">
-                                            <rect key="frame" x="44" y="0.0" width="265" height="44"/>
+                                            <rect key="frame" x="44" y="0.0" width="301" height="44"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="02:18 / 23:01" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ea0-Fs-f8t">
                                                     <rect key="frame" x="8" y="13.5" width="84" height="17"/>
@@ -90,7 +90,7 @@
                                             </constraints>
                                         </view>
                                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BxI-FD-leo">
-                                            <rect key="frame" x="309" y="0.0" width="44" height="44"/>
+                                            <rect key="frame" x="345" y="0.0" width="44" height="44"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="44" id="JhZ-Fo-zq8"/>
@@ -99,7 +99,7 @@
                                             <state key="selected" title="Pause"/>
                                         </button>
                                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aTM-yc-xD5">
-                                            <rect key="frame" x="309" y="0.0" width="44" height="44"/>
+                                            <rect key="frame" x="345" y="0.0" width="44" height="44"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="44" id="Xil-jj-7Ui"/>
@@ -108,7 +108,7 @@
                                             <state key="selected" title="Pause"/>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Fu-zV-xyK">
-                                            <rect key="frame" x="309" y="0.0" width="44" height="44"/>
+                                            <rect key="frame" x="345" y="0.0" width="44" height="44"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="44" id="46b-Sz-sRz"/>
@@ -127,9 +127,9 @@
                             </subviews>
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="displayP3"/>
                             <constraints>
-                                <constraint firstAttribute="trailingMargin" secondItem="jbE-zl-2hx" secondAttribute="trailing" constant="10" id="DIa-15-mct"/>
+                                <constraint firstAttribute="trailing" secondItem="jbE-zl-2hx" secondAttribute="trailing" id="DIa-15-mct"/>
                                 <constraint firstItem="jbE-zl-2hx" firstAttribute="top" secondItem="P6n-1R-vp3" secondAttribute="top" id="cAf-UU-oSg"/>
-                                <constraint firstItem="jbE-zl-2hx" firstAttribute="leading" secondItem="P6n-1R-vp3" secondAttribute="leadingMargin" constant="10" id="l02-bp-Ag1"/>
+                                <constraint firstItem="jbE-zl-2hx" firstAttribute="leading" secondItem="P6n-1R-vp3" secondAttribute="leading" id="l02-bp-Ag1"/>
                             </constraints>
                         </view>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="t2E-Ha-YWj">
