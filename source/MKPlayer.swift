@@ -13,7 +13,7 @@ import UIKit
     public init(config: MKConfig, view: UIView, controller: UIViewController){
         playerController = PlayerViewController(config:config, containerView: view, controller: controller)
     }
-    public func remove() {
+    public func stop() {
         playerController.stop()
         if playerController.presentingViewController != nil {
             playerController.dismiss(animated: false)
@@ -21,5 +21,8 @@ import UIKit
             playerController.view.removeFromSuperview()
             playerController.removeFromParent()
         }
+    }
+    public func isFullscreen() -> Bool {
+        return playerController.presentingViewController != nil
     }
 }

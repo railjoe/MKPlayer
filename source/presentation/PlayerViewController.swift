@@ -13,9 +13,6 @@ import GoogleInteractiveMediaAds
 #endif
 
 class PlayerViewController: UIViewController, PlayerDelegate {
-    static let ContentURLString = "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8"
-    //    static let AdTagURLString = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator="
-    
     var contentPlayhead: IMAAVPlayerContentPlayhead?
     
     @IBOutlet weak var liveView: UIView!
@@ -131,8 +128,10 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         started = true
 #if canImport(GoogleInteractiveMediaAds)
         if let adTag = config.adTag{
+            print("adTag:\(adTag)")
             requestAds(adTag: adTag)
         } else {
+            controlsView.alpha = 1.0
             player.play()
             fireEvent(PlayerEvent.EventType.start)
         }
@@ -157,7 +156,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         }
     }
     
-    private func addToFullscreen(){
+    private func enterFullscreen(){
 //        if let controller = controller {
             self.view.removeFromSuperview()
             removeFromParent()
@@ -275,16 +274,19 @@ class PlayerViewController: UIViewController, PlayerDelegate {
     
     @IBAction func didTapFullScreenButton(){
         if presentingViewController == nil {
-            addToFullscreen()
+            enterFullscreen()
         } else {
-            dismiss(animated: false) { [weak self] in
-                if self?.alertWindow != nil {
-                    self?.alertWindow?.dismiss()
-                    self?.alertWindow?.rootViewController = nil
-                    self?.alertWindow = nil
-                }
-                self?.addToContainer()
+            exitFullScreen()
+        }
+    }
+    private func exitFullScreen() {
+        dismiss(animated: false) { [weak self] in
+            if self?.alertWindow != nil {
+                self?.alertWindow?.dismiss()
+                self?.alertWindow?.rootViewController = nil
+                self?.alertWindow = nil
             }
+            self?.addToContainer()
         }
     }
     
@@ -316,6 +318,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
             fireEvent(PlayerEvent.EventType.complete)
             self.player.seek(to: 0)
             started = false
+            exitFullScreen()
 #if canImport(GoogleInteractiveMediaAds)
             adsLoader?.contentComplete()
             overlayView.alpha = 1.0
@@ -459,17 +462,17 @@ extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
     func requestAds(adTag: String) {
         // Create ad display container for ad rendering.
         
-        if let containerView = containerView {
+//        if let containerView = containerView {
             
             hideContentPlayer()
-            let adContainerView = UIView(frame: containerView.bounds)
-            adContainerView.backgroundColor = .white
+            let adContainerView = UIView(frame: view.bounds)
+            adContainerView.backgroundColor = .black
             adContainerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            containerView.addSubview(adContainerView)
-            
+            view.insertSubview(adContainerView, belowSubview: activityIndicator)
+            activityIndicator.startAnimating()
             self.adContainerView = adContainerView
-            
-            let adDisplayContainer = IMAAdDisplayContainer(adContainer: adContainerView, viewController: controller)
+
+            let adDisplayContainer = IMAAdDisplayContainer(adContainer: adContainerView, viewController: self)
             activityIndicator.startAnimating()
             // Create an ad request with our ad tag, display container, and optional user context.
             let request = IMAAdsRequest(
@@ -480,17 +483,18 @@ extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
             
             adsLoader?.requestAds(with: request)
             
-        } else {
-            activityIndicator.stopAnimating()
-            player.play()
-            fireEvent(PlayerEvent.EventType.start)
-        }
+//        } else {
+//            activityIndicator.stopAnimating()
+//            player.play()
+//            fireEvent(PlayerEvent.EventType.start)
+//        }
     }
     
     func adsLoader(_ loader: IMAAdsLoader, adsLoadedWith adsLoadedData: IMAAdsLoadedData) {
         adsManager = adsLoadedData.adsManager
         adsManager?.delegate = self
         adsManager?.initialize(with: nil)
+        activityIndicator.startAnimating()
     }
     
     func adsLoader(_ loader: IMAAdsLoader, failedWith adErrorData: IMAAdLoadingErrorData) {
@@ -508,8 +512,8 @@ extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
     
     func adsManager(_ adsManager: IMAAdsManager, didReceive event: IMAAdEvent) {
         // Play each ad once it has been loaded
-        activityIndicator.stopAnimating()
         if event.type == IMAAdEventType.LOADED {
+            activityIndicator.stopAnimating()
             adsManager.start()
             fireEvent(PlayerEvent.EventType.ad_start)
         }
