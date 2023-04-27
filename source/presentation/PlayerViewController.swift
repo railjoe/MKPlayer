@@ -577,6 +577,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
     }
 }
 
+#if canImport(GoogleInteractiveMediaAds)
 extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
     
     func setUpAdsLoader() {
@@ -627,6 +628,8 @@ extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
     
     func adsLoader(_ loader: IMAAdsLoader, failedWith adErrorData: IMAAdLoadingErrorData) {
         print("Error loading ads: " + (adErrorData.adError.message ?? "") )
+        showContentPlayer()
+        adContainerView?.removeFromSuperview()
         //        showContentPlayer()
         activityIndicator.stopAnimating()
         adContainerView?.removeFromSuperview()
@@ -656,6 +659,7 @@ extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
     func adsManager(_ adsManager: IMAAdsManager, didReceive error: IMAAdError) {
         activityIndicator.stopAnimating()
         adContainerView?.removeFromSuperview()
+        showContentPlayer()
         player.play()
         toggleOverlay(action: .show)
         fireEvent(PlayerEvent.EventType.start)
@@ -677,6 +681,7 @@ extension PlayerViewController: IMAAdsLoaderDelegate, IMAAdsManagerDelegate {
         fireEvent(PlayerEvent.EventType.start)
     }
 }
+#endif
 
 extension UIWindow {
     func dismiss() {
