@@ -129,9 +129,10 @@ public final class DefaultNetworkErrorLogger: NetworkErrorLogger {
         print("request: \(request.url!)")
         print("headers: \(request.allHTTPHeaderFields!)")
         print("method: \(request.httpMethod!)")
-        if let httpBody = request.httpBody, let result = ((try? JSONSerialization.jsonObject(with: httpBody, options: []) as? [String: AnyObject]) as [String: AnyObject]??) {
-            printIfDebug("body: \(String(describing: result))")
-        } else if let httpBody = request.httpBody, let resultString = String(data: httpBody, encoding: .utf8) {
+//        if let httpBody = request.httpBody, let result = ((try? JSONSerialization.jsonObject(with: httpBody, options: []) as? [String: AnyObject]) as [String: AnyObject]??) {
+//            printIfDebug("body: \(String(describing: result))")
+//        } else
+        if let httpBody = request.httpBody, let resultString = String(data: httpBody, encoding: .utf8) {
             printIfDebug("body: \(String(describing: resultString))")
         }
     }

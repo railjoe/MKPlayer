@@ -11,6 +11,7 @@ import Foundation
     private var url: String?
     private var playerId: String?
     private var projectHash: String?
+    private var screen: String?
     private var adTag: String?
     private var mute: Bool?
     private var autoplay: Bool?
@@ -26,6 +27,10 @@ import Foundation
     }
     public func with(projectHash: String) -> MKConfigBuilder {
         self.projectHash = projectHash
+        return self
+    }
+    public func with(screen: String) -> MKConfigBuilder {
+        self.screen = screen
         return self
     }
     public func with(adTag: String) -> MKConfigBuilder {
@@ -45,6 +50,6 @@ import Foundation
         return self
     }
     public func build() -> MKConfig {
-        return MKConfig(url: url, playerId: playerId, projectHash: projectHash, adTag: adTag, mute: mute ?? false, autoplay: autoplay ?? false, lightTheme: lightTheme ?? true)
+        return MKConfig(url: url, playerId: playerId, projectHash: projectHash, screen: screen ?? "", adTag: adTag, mute: mute ?? false, autoplay: autoplay ?? false, lightTheme: lightTheme ?? true)
     }
 }

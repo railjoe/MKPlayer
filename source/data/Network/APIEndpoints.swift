@@ -11,6 +11,8 @@ struct APIEndpoints {
     static func mobileView(with playerEvent: PlayerEvent) -> Endpoint<Void> {
         return Endpoint(path: "api/mobile-video",
                         method: .post,
-                        bodyParametersEncodable: playerEvent)
+                        headerParameters: ["accept":"application/json", "Content-Type": "application/json"],
+                        bodyParametersEncodable: playerEvent
+        )
     }
 }

@@ -91,7 +91,6 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         addPlayerToView()
         player.delegate = self
         if let url = URL(string: config.url ?? "") {
-            print("URL:\(url)")
             player.set(AVURLAsset(url: url))
         }
         if config.mute {
@@ -145,7 +144,6 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         started = true
 #if canImport(GoogleInteractiveMediaAds)
         if let adTag = config.adTag{
-            print("adTag:\(adTag)")
             requestAds(adTag: adTag)
         } else {
             controlsView.alpha = 1.0
@@ -514,7 +512,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
     }
     
     private func fireEvent(_ event: PlayerEvent.EventType) {
-        repository.sendMobileEvent(event: PlayerEvent(type: event, isStream: isStream, playerId: config.playerId, projectHash: config.projectHash, videoId: config.playerId)) { result in
+        repository.sendMobileEvent(event: PlayerEvent(type: event, isStream: isStream, playerId: config.playerId, projectHash: config.projectHash, screen: config.screen)) { result in
             print(result)
         }
     }

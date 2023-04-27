@@ -20,11 +20,11 @@ struct PlayerEvent: Codable {
     let osVersion: String?
     let app: String?
     let appVersion: String?
-//    let screen: String?
-//    let videoTitle: String?
-//    let poster: String?
+    let screen: String?
+    let videoTitle: String?
+    let poster: String?
 
-    init(type: EventType, isStream: Bool, playerId: String?, projectHash: String?, videoId: String?, screen: String? = nil , videoTitle: String? = nil, poster: String? = nil) {
+    init(type: EventType, isStream: Bool, playerId: String?, projectHash: String?, screen: String? = nil , videoTitle: String? = nil, poster: String? = nil) {
         self.type = type
         self.isStream = isStream
         self.playerId = playerId
@@ -34,10 +34,10 @@ struct PlayerEvent: Codable {
         self.osVersion = UIDevice.current.systemVersion
         self.app = Bundle.main.displayName
         self.appVersion = Bundle.main.releaseVersionNumber
-//        self.screen = screen
+        self.screen = screen
 //        self.videoId = videoId
-//        self.videoTitle = videoTitle
-//        self.poster = poster
+        self.videoTitle = videoTitle
+        self.poster = poster
     }
     
     enum CodingKeys: String, CodingKey {
@@ -51,10 +51,10 @@ struct PlayerEvent: Codable {
         case osVersion = "os_version"
         case app = "app"
         case appVersion = "app_version"
-//        case screen = "screen"
+        case screen = "screen"
 //        case videoId = "video_id"
-//        case videoTitle = "video_title"
-//        case poster = "poster"
+        case videoTitle = "video_title"
+        case poster = "poster"
     }
     
     enum EventType: String, Codable {
